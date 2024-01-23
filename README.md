@@ -3,7 +3,7 @@
 ## Usage
     
 ```bash
-python generate.py -c <config_file> -o <output_file>
+python generate.py -c configs/config.toml -o output
 ```
 
 ## Config File

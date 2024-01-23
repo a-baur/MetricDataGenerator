@@ -8,6 +8,8 @@ import toml
 
 
 def load_config(path: str):
+    if not os.path.isabs(path):
+        path = f"{os.getcwd()}/{path}"
     if not os.path.exists(path):
         raise FileNotFoundError(f"Config file {path} not found.")
     with open(path, 'r') as f:
@@ -151,7 +153,7 @@ def inject_anomaly(signal, at: int, anomaly_factor: float, pattern: str, recover
 
 def create_dir(output_dir: str):
     # check if output directory is relative path
-    if not output_dir.startswith('/'):
+    if not os.path.isabs(output_dir):
         output_dir = f"{os.getcwd()}/{output_dir}"
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
