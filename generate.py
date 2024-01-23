@@ -143,7 +143,7 @@ def inject_anomaly(signal, at: int, anomaly_factor: float, pattern: str, recover
         case "step":
             response = np.ones(recovery_time)
         case _:
-            return signal
+            raise ValueError(f"Anomaly pattern {pattern} not supported.")
 
     response = response * (anomaly_factor - 1) + 1
     signal[at:at+recovery_time] = signal[at:at+recovery_time] * response
