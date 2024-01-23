@@ -1,0 +1,59 @@
+# Configuration for chaos experiment data generator
+
+[general]
+output_dir = "output"
+num_samples = 1000
+
+[metrics]
+
+    [metrics.instances]
+    value = 4
+    step_size=1
+    noise = "exponential"
+    noise_args = {"scale" = 0.48, "smoothing_window" = 300}
+
+    [metrics.cpu_usage]
+    value = 60
+    step_size=0.1
+    noise = "gaussian"
+    noise_args = {"loc" = 0, "scale" = 10, "smoothing_window" = 100}
+
+    [metrics.memory_usage_mb]
+    value = 2000
+    step_size=0.01
+    noise = "logistic"
+    noise_args = {"loc" = 0, "scale" = 100, "smoothing_window" = 600}
+
+    [metrics.response_time_s]
+    value = 0.006
+    step_size=0.00001
+    noise = "exponential"
+    noise_args = {"scale" = 0.001, "smoothing_window" = 10}
+
+[anomalies]
+
+    [anomalies.instances]
+    at = 400
+    magnitude_factor = 2
+    pattern = "step"
+    recovery_time = 200
+
+    [anomalies.cpu_usage]
+    at = 350
+    magnitude_factor = 1.3
+    pattern = "exponential"
+    recovery_time = 300
+
+    [anomalies.memory_usage_mb]
+    at = 100
+    magnitude_factor = 0.4
+    pattern = "oscillating"
+    recovery_time = 400
+    pattern_args = {"frequency" = 0.02}
+
+    [anomalies.response_time_s]
+    at = 125
+    magnitude_factor = 2
+    pattern = "oscillating"
+    recovery_time = 500
+    pattern_args = {"frequency" = 0.015}
