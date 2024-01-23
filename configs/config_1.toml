@@ -2,7 +2,6 @@
 
 [general]
 seed = 1234
-output_dir = "output"
 num_samples = 1000
 
 [metrics]
@@ -36,32 +35,32 @@ num_samples = 1000
 
     [anomalies.metric_1]
     at = 400
-    magnitude_factor = 2
+    anomaly_factor = 2
     pattern = "linear"
     recovery_time = 100
 
     [anomalies.metric_2]
     at = 200
-    magnitude_factor = 1.1
+    anomaly_factor = 1.1
     pattern = "exponential"
     recovery_time = 300
 
     [anomalies.metric_3]
     at = 300
-    magnitude_factor = 0.5
+    anomaly_factor = 0.5
     pattern = "exponential"
     recovery_time = 200
 
     [anomalies.metric_4]
     at = 300
-    magnitude_factor = 0.8
+    anomaly_factor = 0.8
     pattern = "oscillating"
     recovery_time = 500
     pattern_args = {"frequency" = 0.5}
 
     [anomalies.metric_5]
     at = 100
-    magnitude_factor = 1.2
+    anomaly_factor = 1.2
     pattern = "step"
     recovery_time = 30
 

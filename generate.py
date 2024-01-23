@@ -34,11 +34,11 @@ def generate_signals(metrics: dict, anomalies: dict, seed: int, n_samples: int):
         anomaly = anomalies.get(metric)
         if anomaly:
             at = anomaly.pop('at')
-            magnitude_factor = anomaly.pop('magnitude_factor')
+            anomaly_factor = anomaly.pop('anomaly_factor')
             pattern = anomaly.pop('pattern')
             recovery_time = anomaly.pop('recovery_time')
             pattern_args = anomaly.pop('pattern_args', {})
-            signals[metric] = inject_anomaly(signals[metric], at, magnitude_factor, pattern, recovery_time, **pattern_args)
+            signals[metric] = inject_anomaly(signals[metric], at, anomaly_factor, pattern, recovery_time, **pattern_args)
 
         noise = params.pop('noise', None)
         if noise:
@@ -110,13 +110,13 @@ def inject_noise(signal, seed: int, distribution: str, **noise_kwargs):
     return signal + noise
 
 
-def inject_anomaly(signal, at: int, magnitude_factor: float, pattern: str, recovery_time: int, **pattern_kwargs):
+def inject_anomaly(signal, at: int, anomaly_factor: float, pattern: str, recovery_time: int, **pattern_kwargs):
     """
     Inject an anomaly into a signal.
 
     :param signal: Signal to inject anomaly into.
     :param at: Index to inject anomaly at.
-    :param magnitude_factor: Magnitude of the anomaly.
+    :param anomaly_factor: Magnitude of the anomaly.
     :param pattern: Pattern of the anomaly.
     :param recovery_time: Time to recover from the anomaly.
     :param pattern_kwargs: Pattern of the anomaly.
@@ -143,7 +143,7 @@ def inject_anomaly(signal, at: int, magnitude_factor: float, pattern: str, recov
         case _:
             return signal
 
-    response = response * (magnitude_factor - 1) + 1
+    response = response * (anomaly_factor - 1) + 1
     signal[at:at+recovery_time] = signal[at:at+recovery_time] * response
 
     return signal
@@ -198,7 +198,7 @@ def write_to_csv(metrics: dict, output_dir: str):
         writer.writerows(zip(*metrics.values()))
 
 
-def process(config_path: str,  write: bool = True, plot: bool = True):
+def process(config_path: str, output_dir: str, write: bool = True, plot: bool = True):
     config = load_config(config_path)
 
     n_samples = config['general']['num_samples']
@@ -206,8 +206,6 @@ def process(config_path: str,  write: bool = True, plot: bool = True):
     metrics = generate_signals(config['metrics'], config["anomalies"], seed=seed, n_samples=n_samples)
 
     # create csv file with metrics
-    output_dir = config['general']['output_dir']
-
     if plot:
         plot_signal(metrics, output_dir)
     if write:
@@ -217,6 +215,7 @@ def process(config_path: str,  write: bool = True, plot: bool = True):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate synthetic metrics.')
     parser.add_argument('--config', '-c', type=str, help='Path to config file.', required=True)
+    parser.add_argument('--output', '-o', type=str, help='Output directory.', required=False, default='output')
     args = parser.parse_args()
 
-    process(args.config)
+    process(args.config, output_dir=args.output)
