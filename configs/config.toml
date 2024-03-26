@@ -2,6 +2,7 @@
 
 [general]
 num_samples = 150
+seed = 42
 
 [metrics]
 

@@ -120,3 +120,7 @@ seed = 42
     recovery_time = 50
     pattern_args = {"frequency" = 0.25}
 ```
+
+<p align="center">
+  <img src="metric_example.png" width="600" title="Instances">
+</p>
